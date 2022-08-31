@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 //引入Joi模块
 const Joi = require('joi');
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
   username: { type: String, required: true, minlength: 2, maxlength: 20 },
   // unique:true  保证字段不重复
   email: { type: String, unique: true, required: true },
@@ -21,16 +21,26 @@ const User = mongoose.model("User", userSchema);
 //验证用户信息
 const validateUser = user => {
     //定义对象的验证规则
-    const schema = {
-        username: Joi.string().min(2).max(12).required().error(new Error('用户名不符合验证规则')),
-        email: Joi.string().email()(new Error('邮箱格式不符合要求')),
-        password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required().error(new Error('密码格式不符合要求')),
-        role: Joi.string().valid('normal', 'admin').required().error(new Error('角色值非法')),
-        state: Joi.number().valid(0, 1).required().error(new Error('状态值非法'))
-    };
-
+    const schema = Joi.object({
+      username: Joi.string()
+        .min(2)
+        .max(12)
+        .required()
+        .error(new Error("用户名不符合验证规则")),
+      email: Joi.string().email().error(new Error("邮箱格式不符合要求")),
+      password: Joi.string()
+        .regex(/^[a-zA-Z0-9]{3,30}$/)
+        .required()
+        .error(new Error("密码格式不符合要求")),
+      role: Joi.string()
+        .valid("normal", "admin")
+        .required()
+        .error(new Error("角色值非法")),
+      state: Joi.number().valid(0, 1).required().error(new Error("状态值非法")),
+    });
+    
     //实施验证
-    return Joi.validate(user, schema);
+    return schema.validateAsync(user);
 }
 
 // async function createUser() {

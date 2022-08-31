@@ -4,8 +4,8 @@ const {
 const bcrypt = require('bcrypt');
 
 module.exports = async (req, res, next) => {
-    /* 参数：既有get传递的参数，也有body传递的参数，所以用两种方式进行接收 */
-    //接收客户端传递过来的请求参数
+    // /* 参数：既有get传递的参数，也有body传递的参数，所以用两种方式进行接收 */
+    // //接收客户端传递过来的请求参数
     const {
         username,
         email,
@@ -19,7 +19,7 @@ module.exports = async (req, res, next) => {
     let user = await User.findOne({
         _id: id
     });
-
+    // res.send(user)
     const isValid = await bcrypt.compare(password, user.password);
 
     if (isValid) {
@@ -41,13 +41,14 @@ module.exports = async (req, res, next) => {
     } else {
         // 这个好，这样管理员也不能随便修改了
         //密码比对失败
+        // 注意那个id传过去是有用的
         let obj = {
             path: '/admin/user-edit',
             message: '密码比对失败，不能进行用户信息的修改',
             id: id
         }
         // 这是为了触发错误处理中间件
-        next(encodeURIComponent(JSON.stringify(obj)));
+        next(JSON.stringify(obj));
     }
 
 }

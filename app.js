@@ -40,12 +40,10 @@ app.use("/admin", admin);
 // 定义错误处理中间件
 app.use((err, req, res, next) => {
   //将字符串对象转换为对象类型
-  console.log('错误是啥？');
-  console.log(err);
-  const result = JSON.parse(decodeURIComponent(err));
+  const result = JSON.parse(err);
 
   let params = [];
-  // result的项目不定，所以用for循环来拼接
+  // // result的项目不定，所以用for循环来拼接
   for (let attr in result) {
     if (attr != "path") {
       params.push(attr + "=" + result[attr]);
