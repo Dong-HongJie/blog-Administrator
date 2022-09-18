@@ -8,3 +8,5 @@
 
 ## 相关技术栈
 nodeJS、Express、MongoDB、art-template
+
+## 启动方法 nodemon app.js

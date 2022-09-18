@@ -2,8 +2,17 @@ const express = require('express');
 const path = require('path');
 // 引入body-parser，处理post请求参数
 const bodyParser = require('body-parser');
+// // 导入日期处理模块
+// const dateFormat = require('dateformat');
+// // 导入art-template模板引擎
+// const template = require('art-template');
+// template.defaults.imports.dateFormat = dateFormat;
 //导入express-session模块
 const session = require('express-session');
+// 导入morgan模块
+const morgan = require('morgan');
+// 导入config模块
+const config = require("config");
 const app = express();
 // 数据库连接
 require('./model/connect')
@@ -27,6 +36,15 @@ app.set('view engine', 'art');
 app.engine('art', require('express-art-template'))
 // 开放静态资源文件
 app.use(express.static(path.join(__dirname, 'public')))
+
+console.log(config.get('title'));
+
+// 获取系统环境变量
+if(process.env.NODE_ENV === 'development') {
+  // 打印客户端的请求信息
+  app.use(morgan('dev'))
+}
+
 // 引入路由并让路由去处理请求
 const home = require('./route/home');
 const admin = require("./route/admin");
@@ -54,4 +72,4 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(80)
-console.log('网站服务器启动成功，请访问localhost');
+console.log("网站服务器启动成功，请访问localhost");
