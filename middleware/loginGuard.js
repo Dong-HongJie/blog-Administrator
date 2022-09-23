@@ -10,6 +10,7 @@ const guard = (req, res, next) => {
     //如果用户是登录状态并且是一个普通用户
     if (req.session.role == "normal") {
       //让他跳转到博客首页 阻止程序向下执行
+      // 这也算是路由守卫了
       return res.redirect("/home/");
     }
     //用户是登录状态 将请求放行

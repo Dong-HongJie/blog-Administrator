@@ -72,4 +72,4 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(80)
-console.log("网站服务器启动成功，请访问localhost");
+console.log("网站服务器启动成功，请访问localhost/home");
